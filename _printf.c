@@ -10,7 +10,7 @@
 int _printf(const char *format, ...)
 {
 	int i;
-	char format_specifier;
+	/**char format_specifier; */
 	int character_count;
 	va_list function_arguments;
 	va_start(function_arguments, format);
@@ -29,8 +29,9 @@ int _printf(const char *format, ...)
 		{
 			/** Handle format specifiers */
 			i++; /** To get the next character after '%' */
+			character_count += handle_format_specifier(format[i], function_arguments);
 
-			format_specifier = format[i]; /** assign either c, d, i or s */
+			/** format_specifier = format[i]; 
 
 			if (format_specifier == 'd' || format_specifier == 'i')
 			{
@@ -50,7 +51,8 @@ int _printf(const char *format, ...)
 			{
 				char character_arguments;
 				character_arguments = (char)va_arg(function_arguments, int);
-				character_count += print_character(character_arguments); } /** Writes the character to stdout */
+				character_count += print_character(character_arguments); }
+	
 			else if (format_specifier == 's')
 			{
 				char* string_arguments;
@@ -88,7 +90,7 @@ int _printf(const char *format, ...)
 			{
 				write(1, &format[i - 1], 1);
 				write(1, &format[i], 1);
-				character_count += 2; }
+				character_count += 2; } */
 		}
 	}
 
@@ -96,4 +98,49 @@ int _printf(const char *format, ...)
 
 	va_end(function_arguments);
 	return (character_count);
+}
+
+/**
+ *  handle_format_specifier - Handle the various format cases
+ *  @format_specifier: The format specifier
+ *  Return: The length of printed characters
+ */
+int handle_format_specifier(char format_specifier, va_list args)
+{
+	switch (format_specifier)
+	{
+		case 'd':
+		case 'i':
+
+			return (print_integer(va_arg(args, int)));
+
+		case 'u':
+			return (print_unsigned_int(va_arg(args, unsigned int)));
+
+		case 'c':
+			return (print_character((char)va_arg(args, int)));
+
+		case 's':
+			return (print_string(va_arg(args, char*)));
+
+		case 'x':
+			return (print_hexadecimal(va_arg(args, unsigned int)));
+
+		case 'X':
+			return (print_uc_hexadecimal(va_arg(args, unsigned int)));
+
+		case 'o':
+			return (print_octal(va_arg(args, unsigned int)));
+
+		case 'p':
+			return (print_address(va_arg(args, void*)));
+
+		case '%':
+			return (print_percentage());
+
+		default:
+			write(1, "%", 1);
+			write(1, &format_specifier, 1);
+			return (2); }
+
 }
