@@ -1,89 +1,66 @@
 #include "main.h"
-#include <string.h>
-#include <stdarg.h>
-#include <unistd.h>
-
-/**
- * _putchar - writes the character c to stdout
- * @c: The character to print
- *
- * Return: On success 1.
- * On error, -1 is returned, and errno is set appropriately.
- */
-int _putchar(char c)
-{
-	return (write(1, &c, 1));
-}
-
-
-/**
- * print_str - write to stdout a string
- * @s: string that will be write
- *
- * Return: 0 in succes.
- */
-
-int print_str(char *s)
-{
-	unsigned long int i = 0;
-
-	while (*(s + i) != '\0')
-	{
-		_putchar(*(s + i));
-		i++;
-	}
-	return (0);
-}
-
 
 /**
  * _printf - work like std printf function
- * @format: format of string
+ * @format: Format of string
  *
  * Return: number of characters printed
  */
 
 int _printf(const char *format, ...)
 {
-	unsigned int long i = 0, c = 0;
-	va_list a;
-	char *s;
+	int i;
+	char format_specifier;
+	int character_count;
+	va_list function_arguments;
+	va_start(function_arguments, format);
 
-	va_start(a, format);
-	if (format == NULL)
+	character_count = 0;
+
+	/** Iterate through the format string and handle format specifiers */
+	for (i = 0; format[i] != '\0'; i++)
 	{
-		_putchar('\n');
-		return (0);
-	}
-	while (i < strlen(format))
-	{
-		if (*(format + i) == '%')
+		/** Output regular characters */
+		if (format[i] != '%')
 		{
-			i++;
-			switch (*(format + i))
-			{
-			case 'c':
-				_putchar(va_arg(a, int));
-				c++;
-				break;
-			case 's':
-				s = va_arg(a, char*);
-				print_str(s);
-				c = c + strlen(s);
-				break;
-			default:
-				break;
-			}
-		}
+			write(1, &format[i], 1); /** Writes a single character to stdout */
+			character_count++; } /** Increment the character count for printed character */
 		else
 		{
-			_putchar(*(format + i));
-			c++;
+			/** Handle format specifiers */
+			i++; /** To get the next character after '%' */
+
+			format_specifier = format[i]; /** assign either c, d, i or s */
+
+			if (format_specifier == 'd' || format_specifier == 'i')
+			{
+				int number_argument;
+				char buffer[20]; /** Char to store the integer/number as a string */
+				int num;
+
+				number_argument = va_arg(function_arguments, int);
+
+				num = sprintf(buffer, "%d", number_argument);
+				write(1, buffer, num); } /** Write string to stdout */
+
+			else if (format_specifier == 'c')
+			{
+				char character_arguments;
+				character_arguments = (char)va_arg(function_arguments, int);
+				write(1, &character_arguments, 1); } /** Writes the character to stdout */
+			else if (format_specifier == 's')
+			{
+				char* string_arguments;
+				int len;
+
+				string_arguments = va_arg(function_arguments, char*);
+				len = strlen(string_arguments);
+				write(1, string_arguments, len); } /** write the strimg to stdout */
 		}
-		i++;
 	}
-	_putchar('\n');
-	va_end(a);
-	c++;
-	return (c);
+
+
+
+	va_end(function_arguments);
+	return (character_count);
 }
