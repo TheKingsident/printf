@@ -35,27 +35,60 @@ int _printf(const char *format, ...)
 			if (format_specifier == 'd' || format_specifier == 'i')
 			{
 				int number_argument;
-				char buffer[20]; /** Char to store the integer/number as a string */
-				int num;
 
 				number_argument = va_arg(function_arguments, int);
+				character_count += print_integer(number_argument);  }
+			
+			else if (format_specifier == 'u')
+			{
+				unsigned int unsigned_argument;
 
-				num = sprintf(buffer, "%d", number_argument);
-				write(1, buffer, num); } /** Write string to stdout */
+				unsigned_argument = va_arg(function_arguments, unsigned int);
+				character_count += print_unsigned_int(unsigned_argument); }
 
 			else if (format_specifier == 'c')
 			{
 				char character_arguments;
 				character_arguments = (char)va_arg(function_arguments, int);
-				write(1, &character_arguments, 1); } /** Writes the character to stdout */
+				character_count += print_character(character_arguments); } /** Writes the character to stdout */
 			else if (format_specifier == 's')
 			{
 				char* string_arguments;
-				int len;
 
 				string_arguments = va_arg(function_arguments, char*);
-				len = strlen(string_arguments);
-				write(1, string_arguments, len); } /** write the strimg to stdout */
+				character_count += print_string(string_arguments); }
+			else if (format_specifier == 'x')
+			{
+				unsigned int hexadecimal_arguments;
+
+				hexadecimal_arguments = va_arg(function_arguments, unsigned int);
+				character_count += print_hexadecimal(hexadecimal_arguments); }
+			else if (format_specifier == 'X')
+			{
+				unsigned int uc_hexadecimal_arguments;
+
+				uc_hexadecimal_arguments = va_arg(function_arguments, unsigned int);
+				character_count += print_uc_hexadecimal(uc_hexadecimal_arguments); }
+			else if (format_specifier == 'o')
+			{
+				unsigned int octal_arguments;
+
+				octal_arguments = va_arg(function_arguments, unsigned int);
+				character_count += print_octal(octal_arguments); }
+			else if (format_specifier == 'p')
+			{
+				void* pointer_arguments;
+
+				pointer_arguments = va_arg(function_arguments, void*);
+				character_count += print_address(pointer_arguments); }
+			else if (format_specifier == '%')
+			{
+				character_count += print_percentage(); }
+			else
+			{
+				write(1, &format[i - 1], 1);
+				write(1, &format[i], 1);
+				character_count += 2; }
 		}
 	}
 
