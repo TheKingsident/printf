@@ -22,19 +22,19 @@ int _printf(const char *format, ...)
 		/** Output regular characters */
 		if (format[i] != '%')
 		{
-			write(1, &format[i], 1); /** Writes a single character to stdout */
+			write(1, &format[i], 1); /** Writes a single
+						  * character to stdout
+						  */
 			character_count++; }
 		else
 		{
 			/** Handle format specifiers */
 			i++; /** To get the next character after '%' */
-			character_count += handle_format_specifier(format[i], function_arguments);
+			character_count += handle_format_specifier(format[i],
+					function_arguments);
 
 		}
 	}
-
-
-
 	va_end(function_arguments);
 	return (character_count);
 }
@@ -47,11 +47,11 @@ int _printf(const char *format, ...)
  */
 int handle_format_specifier(char format_specifier, va_list args)
 {
+
 	switch (format_specifier)
 	{
 		case 'd':
 		case 'i':
-
 			return (print_integer(va_arg(args, int)));
 
 		case 'u':

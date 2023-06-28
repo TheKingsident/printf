@@ -11,11 +11,23 @@ int main(void)
 {
     int len;
     int len2;
+    int len3;
+    int len4;
     unsigned int ui;
     void *addr;
 
     len = _printf("Let's try to printf a simple sentence.\n");
     len2 = printf("Let's try to printf a simple sentence.\n");
+    len3 = _printf("A simple %5 sentence\n");
+    len4 = printf("A simple %5 sentence\n");
+    _printf("Length:[%d, %i]\n", len3, len3);
+    _printf("hello %\n");
+    _printf("BEFORE\n");
+    _printf("check%", "non\n");
+    _printf("check", "non\n");
+    _printf("AFTER\n");
+    printf("check %", "non\n");
+    printf("Length:[%d, %i]\n", len4, len4);
     ui = (unsigned int)INT_MAX + 1024;
     addr = (void *)0x7ffe637541f0;
     _printf("Length:[%d, %i]\n", len, len);
@@ -39,6 +51,7 @@ int main(void)
     _printf("Len:[%d]\n", len);
     printf("Len:[%d]\n", len2);
     _printf("Unknown:[%r]\n");
-    /** printf("Unknown:[%r]\n"); */
+    printf("Unknown:[%r]\n");
+
     return (0);
 }
