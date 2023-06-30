@@ -5,7 +5,7 @@
  * @string: The string to prrint
  * Return: The number of characters printed
  */
-int print_string(const char* string)
+int print_string(const char *string)
 {
 	int len;
 
